@@ -1,0 +1,4 @@
+enum TabScreen {
+  Article,
+  Bookmark,
+}

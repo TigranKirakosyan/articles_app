@@ -1,0 +1,89 @@
+{
+    "articles": [
+        {
+            "id": 1,
+            "userName": "Albert Einstein",
+            "elapsedTimeInHour": 11,
+            "bookmarked": false,
+            "userImage": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Albert-einstein-profile-picture-512x512.png.cf.png",
+            "title": "Theory of relativity",
+            "description": "Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. His work is also known for its influence on the philosophy of science.",
+            "images": []
+        },
+        {
+            "id": 2,
+            "userName": "Amazon Prime",
+            "elapsedTimeInHour": 1,
+            "bookmarked": true,
+            "userImage": "https://pbs.twimg.com/profile_images/2449223859/111v879dnnemc7ej1ku2_400x400.jpeg",
+            "title": "Check out what's included with your Prime membership and rate",
+            "description": "Amazon Prime is a paid subscription program from Amazon that gives users access to additional services otherwise unavailable or available at a premium to regular Amazon customers. Services include same, one or two-day delivery and streaming music and video.",
+            "images": []
+        },
+        {
+            "id": 3,
+            "userName": "Ali Connors",
+            "elapsedTimeInHour": 4,
+            "bookmarked": false,
+            "userImage": "https://pbs.twimg.com/profile_images/725013638411489280/4wx8EcIA_400x400.jpg",
+            "title": "Brunch this weekend?",
+            "description": "Here are some great shorts from my trip",
+            "images": [
+                "https://cdn.wallpapersafari.com/25/95/BvMFHt.jpg",
+                "https://topspotsolutions.com/wp-content/uploads/2019/06/Beauty-of-nature-random-4884759-1280-800-1024x640-800x400.jpg",
+                "https://www.breamishvalley.com/wp-content/uploads/2015/03/Mundane-nature-800x400-c-default.jpg",
+                "https://www.perutravelmajestic.com/wp-content/uploads/2017/04/Tuc%C3%A1n-800x400.jpg",
+                "https://www.newcaledonia.travel/sites/default/files/inline-images/Aquarium-Naturel-Mare-Loyalty-Islands-800x400.png"
+            ]
+        },
+        {
+            "id": 4,
+            "userName": "Google Express",
+            "elapsedTimeInHour": 9,
+            "bookmarked": true,
+            "userImage": "https://vistatec.com/wp-content/uploads/2018/12/google-favicon-vector-400x400.png",
+            "title": "Flutter | Microsoft Active",
+            "description": "We needed to build an iOS and Android native application that could log into our customer’s Active Directory account, do some custom scope things and pull authorized information via an API.",
+            "images": [
+                "https://yaftamobile-pulse.s3.eu-central-1.amazonaws.com/blog/flutter.png"
+            ]
+        },
+        {
+            "id": 5,
+            "userName": "Allison Trabucco",
+            "elapsedTimeInHour": 5,
+            "bookmarked": false,
+            "userImage": "",
+            "title": "Bonjour from Paris",
+            "description": "Paris, France's capital, is a major European city and a global center for art, fashion, gastronomy and culture. Its 19th-century cityscape is crisscrossed by wide boulevards and the River Seine. Beyond such landmarks as the Eiffel Tower and the 12th-century, Gothic Notre-Dame cathedral, the city is known for its cafe culture and designer boutiques along the Rue du Faubourg Saint-Honoré.Paris, France's capital, is a major European city and a global center for art, fashion, gastronomy and culture. Its 19th-century cityscape is crisscrossed by wide boulevards and the River Seine. Beyond such landmarks as the Eiffel Tower and the 12th-century, Gothic Notre-Dame cathedral, the city is known for its cafe culture and designer boutiques along the Rue du Faubourg Saint-Honoré.",
+            "images": [
+                "https://inhabitat.com/wp-content/blogs.dir/1/files/2010/12/Paris-Bans-SUVS-2-800x400.jpg",
+                "https://mll.cah.ucf.edu/wp-content/uploads/sites/33/2018/01/frenchelection_eiffel-1600x400.jpg"
+            ]
+        },
+        {
+            "id": 6,
+            "userName": "CNN International",
+            "elapsedTimeInHour": 2,
+            "bookmarked": false,
+            "userImage": "https://cdn.cnn.com/cnn/.e1mo/img/4.0/logos/CNN_logo_400x400.png",
+            "title": "CNN International - Breaking News, US News, World News",
+            "description": "Cable News Network is an American news-based pay television channel owned by CNN Worldwide, a unit of the WarnerMedia News & Sports division of AT&T's WarnerMedia. CNN was founded in 1980 by American media proprietor Ted Turner and Reese Schonfeld as a 24-hour cable news channel.",
+            "images": []
+        },
+        {
+            "id": 7,
+            "userName": "SpaceX",
+            "elapsedTimeInHour": 4,
+            "bookmarked": true,
+            "userImage": "https://cdn.cnn.com/cnn/.e1mo/img/4.0/logos/CNN_logo_400x400.png",
+            "title": "SpaceX designs, manufactures and launches advanced rockets and spacecraft.",
+            "description": "Space Exploration Technologies Corp. is an American aerospace manufacturer and space transportation services company headquartered in Hawthorne, California. It was founded in 2002 by Elon Musk with the goal of reducing space transportation costs to enable the colonization of Mars.",
+            "images": [
+                "https://i.insider.com/5f1b201a5af6cc7e1b741330?width=1136&format=jpeg",
+                "https://media.wired.com/photos/5c1d53145ecee564c8186fd9/125:94/w_2375,h_1786,c_limit/SpaceX-1074353714.jpg",
+                "https://static01.nyt.com/images/2019/09/28/us/politics/28spacex/28spacex-videoSixteenByNineJumbo1600.jpg"
+            ]
+        }
+    ]
+}
