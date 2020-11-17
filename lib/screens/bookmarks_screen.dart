@@ -5,6 +5,8 @@ import '../screens/state_container.dart';
 import '../widgets/article_item.dart';
 import '../types.dart';
 
+// Fixme better to have one abstract super class for articles screen, and two implementations
+// one for the Web Articles screen and one for Bookmarks screen
 class BookmarksScreen extends StatefulWidget {  
   final List<Article> articles;
 
@@ -12,7 +14,6 @@ class BookmarksScreen extends StatefulWidget {
   
   @override
   _BookmarksScreenState createState() => _BookmarksScreenState();
-
 }
 
 class _BookmarksScreenState extends State<BookmarksScreen> {
@@ -36,6 +37,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Fixme move data fetch code to FutureBuilder
     final container = StateContainer.of(context);
     bookmarkedArticles.clear();
     bookmarkedArticles.addAll(container.articleData.filteredBookmarkedArticles);
@@ -51,6 +53,9 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
       })
       : ListView(
         children: [
+          // Fixme this could be moved to the separate method as we are using this
+          //  in a multiple screens
+          // Fixme also use alignment property
             Container(
               child: Center(
                 child: Text("No articles are available"),

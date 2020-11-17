@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mailer/flutter_mailer.dart';
-import 'package:flutter/material.dart';
 
 import './state_container.dart';
 import '../models/article.dart';
-import '../widgets/article_item_detail.dart';
 import '../storage.dart';
 import '../types.dart';
+import '../widgets/article_item_detail.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
   static const routeName = '/article-detail';
 
-
-final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
+  //Good
+  final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> send(String subject, String body) async {
     if (Platform.isIOS) {
@@ -64,6 +65,7 @@ final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
 
       await showDialog<void>(
           context: _scafoldKey.currentContext,
+          // Fixme move AlertDialog in to separate method
           builder: (BuildContext context) => AlertDialog(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4)),
@@ -97,6 +99,7 @@ final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
     final removeArticle = args[1] as Function;
     final fromScreen = args[2] as TabScreen;
 
+    // Fixme move appBar property inside method
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
             actionsForegroundColor: Colors.black,
@@ -104,178 +107,93 @@ final GlobalKey<ScaffoldState> _scafoldKey = GlobalKey<ScaffoldState>();
               '${selectedArticle.title}',
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: 
-            Row(
+            trailing: Row(
               mainAxisSize: MainAxisSize.min,
-              children: 
-                (!selectedArticle.bookmarked && fromScreen == TabScreen.Article) ? <Widget>[
-                  bookmarkAction(context, selectedArticle, removeArticle, send),
-                  showMenuActionSheet(context, selectedArticle, removeArticle, send, fromScreen),
-                ] : <Widget>[
-                  showMenuActionSheet(context, selectedArticle, removeArticle, send, fromScreen),
-                ],
+              children: (!selectedArticle.bookmarked &&
+                      fromScreen == TabScreen.Article)
+                  ? <Widget>[
+                      bookmarkAction(
+                          context, selectedArticle, removeArticle, send),
+                      showMenuActionSheet(context, selectedArticle,
+                          removeArticle, send, fromScreen),
+                    ]
+                  : <Widget>[
+                      showMenuActionSheet(context, selectedArticle,
+                          removeArticle, send, fromScreen),
+                    ],
             ),
           )
         : AppBar(
             title: Text('${selectedArticle.title}'),
-            actions: (!selectedArticle.bookmarked && fromScreen == TabScreen.Article) ? <Widget>[
-              bookmarkAction(context, selectedArticle, removeArticle, send),
-              popMenu(context, selectedArticle, removeArticle, send, fromScreen),
-            ] : <Widget>[
-              popMenu(context, selectedArticle, removeArticle, send, fromScreen),
-            ],
-    );
+            actions:
+                (!selectedArticle.bookmarked && fromScreen == TabScreen.Article)
+                    ? <Widget>[
+                        bookmarkAction(
+                            context, selectedArticle, removeArticle, send),
+                        popMenu(context, selectedArticle, removeArticle, send,
+                            fromScreen),
+                      ]
+                    : <Widget>[
+                        popMenu(context, selectedArticle, removeArticle, send,
+                            fromScreen),
+                      ],
+          );
     return Scaffold(
-      key: _scafoldKey,
-      appBar: appBar,
-      body: Scrollbar(
-        child:SingleChildScrollView(
-        child: ArticleItemDetail(
-          article: Article(
-          id: selectedArticle.id, 
-          title: selectedArticle.title, 
-          username: selectedArticle.username, 
-          userImage: selectedArticle.userImage, 
-          description: selectedArticle.description, 
-          images: selectedArticle.images, 
+        key: _scafoldKey,
+        appBar: appBar,
+        body: Scrollbar(
+            child: SingleChildScrollView(
+                child: ArticleItemDetail(
+                    article: Article(
+          id: selectedArticle.id,
+          title: selectedArticle.title,
+          username: selectedArticle.username,
+          userImage: selectedArticle.userImage,
+          description: selectedArticle.description,
+          images: selectedArticle.images,
           elapsedTime: selectedArticle.elapsedTime,
           bookmarked: selectedArticle.bookmarked,
-          )
-          )
-      )
-    )
-    );
+        )))));
   }
-  
 }
 
-Widget showMenuActionSheet(BuildContext context, Article article, Function removeArticle, Function sendEmail, TabScreen fromScreen) {
+Widget showMenuActionSheet(BuildContext context, Article article,
+    Function removeArticle, Function sendEmail, TabScreen fromScreen) {
   return GestureDetector(
-          child: Container(
-                  width: 34,
-                  height: 34,
-                  child:Icon(CupertinoIcons.ellipsis_vertical, size: 20),
-                  color: Colors.transparent,
-              ),
-          onTap: () {
-            final action = CupertinoActionSheet(
-              title: Text(
-                "Article Actions",
-                style: TextStyle(fontSize: 20),
-              ),
-              message: Text(
-                "Select action ",
-                style: TextStyle(fontSize: 15.0),
-              ),
-              actions: <Widget>[
-                CupertinoActionSheetAction(
-                  child: Text("Email"),
-  //                          isDefaultAction: true,
-                  onPressed: () {
-                    sendEmail(article.title, article.description);
-                    Navigator.pop(context);
-                  },
-                ),
-                CupertinoActionSheetAction(
-                  child: (article.bookmarked && fromScreen == TabScreen.Bookmark) ? Text("Remove") : Text("Delete"),
-  //                          isDestructiveAction: true,
-                  onPressed: () {
-                    if (article.bookmarked && fromScreen == TabScreen.Bookmark) {
-                        List<Article> articles;
-                        List<Article> bookmarkedArticles;
-                        List<Article> filteredArticles;
-                        List<Article> filteredBookmarkedArticles;
-
-                        article.bookmarked = false;
-                        final container = StateContainer.of(context);
-                        articles = container.articleData.articles;
-                        int index = articles.indexWhere((element) => element.id == article.id);
-                        if (index != -1) {
-                          articles[index].bookmarked = false;
-                        }
-                        filteredArticles = container.articleData.filteredArticles;
-                        int ind = filteredArticles.indexWhere((element) => element.id == article.id);
-                        if (ind != -1) {
-                          filteredArticles[ind].bookmarked = false;
-                        }
-                        bookmarkedArticles = container.articleData.bookmarkedArticles;
-                        bookmarkedArticles.removeWhere((element) => element.id == article.id);
-                        filteredBookmarkedArticles = container.articleData.filteredBookmarkedArticles;
-                        filteredBookmarkedArticles.removeWhere((element) => element.id == article.id);
-                        container.updateArticleData(articles: articles, bookmarkedArticles: bookmarkedArticles, filteredArticles: filteredArticles, filteredBookmarkedArticles: filteredBookmarkedArticles);
-
-                        Storage storage = Storage();
-                        String json = jsonEncode(container.articleData.articles);
-                        storage.writeData(json);
-                     }
-                     else { 
-                        removeArticle(article.id);
-                     }
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-              cancelButton: CupertinoActionSheetAction(
-                child: Text("Cancel"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            );
-            showCupertinoModalPopup(
-              context: context, builder: (context) => action
-            );
-          },
-      );
-}
-
-Widget bookmarkAction(BuildContext context, Article article, Function removeArticle, Function sendEmail) {
-  return GestureDetector(
-          child: Container(
-                  width: 34,
-                  height: 34,
-                  child:Icon(CupertinoIcons.bookmark, size: 20),
-                  color: Colors.transparent,
-              ),
-          onTap: () {
-                List<Article> articles;
-                List<Article> bookmarkedArticles;
-                List<Article> filteredArticles;
-                List<Article> filteredBookmarkedArticles;
-
-                article.bookmarked = true;
-                final container = StateContainer.of(context);
-                articles = container.articleData.articles;
-                int index = articles.indexWhere((element) => element.id == article.id);
-                if (index != -1) {
-                  articles[index].bookmarked = true;
-                  bookmarkedArticles = container.articleData.bookmarkedArticles;
-                  bookmarkedArticles.add(article);
-                }
-                filteredArticles = container.articleData.filteredArticles;
-                int ind = filteredArticles.indexWhere((element) => element.id == article.id);
-                if (ind != -1) {
-                  filteredArticles[ind].bookmarked = true;
-                }
-                container.updateArticleData(articles: articles, bookmarkedArticles: bookmarkedArticles, filteredArticles: filteredArticles, filteredBookmarkedArticles: filteredBookmarkedArticles);
-
-                Storage storage = Storage();
-                String json = jsonEncode(container.articleData.articles);
-                storage.writeData(json);
- //               Navigator.pop(context);
-          },
-      );
-}
-
-Widget popMenu(BuildContext context, Article article, Function removeArticle, Function sendEmail, TabScreen fromScreen) {
-    return PopupMenuButton(
-      onSelected: (value) {
-          if (value == 1) {
-            sendEmail(article.title, article.description);
-          }
-          else {
-            if (article.bookmarked && fromScreen == TabScreen.Bookmark) {
+    child: Container(
+      width: 34,
+      height: 34,
+      child: Icon(CupertinoIcons.ellipsis_vertical, size: 20),
+      color: Colors.transparent,
+    ),
+    onTap: () {
+      // Fixme move click handling in to separate method
+      final action = CupertinoActionSheet(
+        title: Text(
+          "Article Actions",
+          style: TextStyle(fontSize: 20),
+        ),
+        message: Text(
+          "Select action ",
+          style: TextStyle(fontSize: 15.0),
+        ),
+        actions: <Widget>[
+          CupertinoActionSheetAction(
+            child: Text("Email"),
+            //                          isDefaultAction: true,
+            onPressed: () {
+              sendEmail(article.title, article.description);
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoActionSheetAction(
+            child: (article.bookmarked && fromScreen == TabScreen.Bookmark)
+                ? Text("Remove")
+                : Text("Delete"),
+            //                          isDestructiveAction: true,
+            onPressed: () {
+              // Fixme method is too big
+              if (article.bookmarked && fromScreen == TabScreen.Bookmark) {
                 List<Article> articles;
                 List<Article> bookmarkedArticles;
                 List<Article> filteredArticles;
@@ -284,55 +202,175 @@ Widget popMenu(BuildContext context, Article article, Function removeArticle, Fu
                 article.bookmarked = false;
                 final container = StateContainer.of(context);
                 articles = container.articleData.articles;
-                int index = articles.indexWhere((element) => element.id == article.id);
+                int index =
+                    articles.indexWhere((element) => element.id == article.id);
                 if (index != -1) {
                   articles[index].bookmarked = false;
                 }
                 filteredArticles = container.articleData.filteredArticles;
-                int ind = filteredArticles.indexWhere((element) => element.id == article.id);
+                int ind = filteredArticles
+                    .indexWhere((element) => element.id == article.id);
                 if (ind != -1) {
                   filteredArticles[ind].bookmarked = false;
                 }
                 bookmarkedArticles = container.articleData.bookmarkedArticles;
-                bookmarkedArticles.removeWhere((element) => element.id == article.id);
-                filteredBookmarkedArticles = container.articleData.filteredBookmarkedArticles;
-                filteredBookmarkedArticles.removeWhere((element) => element.id == article.id);
-                container.updateArticleData(articles: articles, bookmarkedArticles: bookmarkedArticles, filteredArticles: filteredArticles, filteredBookmarkedArticles: filteredBookmarkedArticles);
-                
+                bookmarkedArticles
+                    .removeWhere((element) => element.id == article.id);
+                filteredBookmarkedArticles =
+                    container.articleData.filteredBookmarkedArticles;
+                filteredBookmarkedArticles
+                    .removeWhere((element) => element.id == article.id);
+                container.updateArticleData(
+                    articles: articles,
+                    bookmarkedArticles: bookmarkedArticles,
+                    filteredArticles: filteredArticles,
+                    filteredBookmarkedArticles: filteredBookmarkedArticles);
+
                 Storage storage = Storage();
                 String json = jsonEncode(container.articleData.articles);
                 storage.writeData(json);
-            } 
-            else {
+              } else {
                 removeArticle(article.id);
-            }
+              }
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          )
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          child: Text("Cancel"),
+          onPressed: () {
             Navigator.pop(context);
+          },
+        ),
+      );
+      showCupertinoModalPopup(context: context, builder: (context) => action);
+    },
+  );
+}
+
+Widget bookmarkAction(BuildContext context, Article article,
+    Function removeArticle, Function sendEmail) {
+  // Fixme better to use IncWell or IncResponse instead of GestureDetector
+  return GestureDetector(
+    child: Container(
+      width: 34,
+      height: 34,
+      child: Icon(CupertinoIcons.bookmark, size: 20),
+      color: Colors.transparent,
+    ),
+    onTap: () {
+      // Fixme move the logic in to the separate method
+      List<Article> articles;
+      List<Article> bookmarkedArticles;
+      List<Article> filteredArticles;
+      List<Article> filteredBookmarkedArticles;
+
+      article.bookmarked = true;
+      final container = StateContainer.of(context);
+      articles = container.articleData.articles;
+      int index = articles.indexWhere((element) => element.id == article.id);
+      if (index != -1) {
+        articles[index].bookmarked = true;
+        bookmarkedArticles = container.articleData.bookmarkedArticles;
+        bookmarkedArticles.add(article);
+      }
+      filteredArticles = container.articleData.filteredArticles;
+      int ind =
+          filteredArticles.indexWhere((element) => element.id == article.id);
+      if (ind != -1) {
+        filteredArticles[ind].bookmarked = true;
+      }
+      container.updateArticleData(
+          articles: articles,
+          bookmarkedArticles: bookmarkedArticles,
+          filteredArticles: filteredArticles,
+          filteredBookmarkedArticles: filteredBookmarkedArticles);
+
+      Storage storage = Storage();
+      String json = jsonEncode(container.articleData.articles);
+      storage.writeData(json);
+      //               Navigator.pop(context);
+    },
+  );
+}
+
+Widget popMenu(BuildContext context, Article article, Function removeArticle,
+    Function sendEmail, TabScreen fromScreen) {
+  return PopupMenuButton(
+      onSelected: (value) {
+        if (value == 1) {
+          sendEmail(article.title, article.description);
+        } else {
+          // Fixme move the logic in to the separate method
+          if (article.bookmarked && fromScreen == TabScreen.Bookmark) {
+            List<Article> articles;
+            List<Article> bookmarkedArticles;
+            List<Article> filteredArticles;
+            List<Article> filteredBookmarkedArticles;
+
+            article.bookmarked = false;
+            final container = StateContainer.of(context);
+            articles = container.articleData.articles;
+            int index =
+                articles.indexWhere((element) => element.id == article.id);
+            if (index != -1) {
+              articles[index].bookmarked = false;
+            }
+            filteredArticles = container.articleData.filteredArticles;
+            int ind = filteredArticles
+                .indexWhere((element) => element.id == article.id);
+            if (ind != -1) {
+              filteredArticles[ind].bookmarked = false;
+            }
+            bookmarkedArticles = container.articleData.bookmarkedArticles;
+            bookmarkedArticles
+                .removeWhere((element) => element.id == article.id);
+            filteredBookmarkedArticles =
+                container.articleData.filteredBookmarkedArticles;
+            filteredBookmarkedArticles
+                .removeWhere((element) => element.id == article.id);
+            container.updateArticleData(
+                articles: articles,
+                bookmarkedArticles: bookmarkedArticles,
+                filteredArticles: filteredArticles,
+                filteredBookmarkedArticles: filteredBookmarkedArticles);
+
+            Storage storage = Storage();
+            String json = jsonEncode(container.articleData.articles);
+            storage.writeData(json);
+          } else {
+            removeArticle(article.id);
           }
+          Navigator.pop(context);
+        }
       },
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 1,
-          child: Row(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
-                child: Icon(Icons.email),
-              ),
-              Text('Email')
-            ],
-          )
-        ),
-        PopupMenuItem(
-            value: 2,
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
-                  child: Icon(Icons.delete),
-                ),
-                (article.bookmarked && fromScreen == TabScreen.Bookmark) ? Text("Remove") : Text("Delete"),
-              ],
-            )
-        ),
-      ]);
+        // Fixme move PopupMenuItem in to the separate method of StatelessWidget,
+        // and provide text and icon as parameter
+            PopupMenuItem(
+                value: 1,
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                      child: Icon(Icons.email),
+                    ),
+                    Text('Email')
+                  ],
+                )),
+            PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(2, 2, 8, 2),
+                      child: Icon(Icons.delete),
+                    ),
+                    (article.bookmarked && fromScreen == TabScreen.Bookmark)
+                        ? Text("Remove")
+                        : Text("Delete"),
+                  ],
+                )),
+          ]);
 }

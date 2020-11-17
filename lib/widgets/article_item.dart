@@ -15,8 +15,8 @@ class ArticleItem extends StatelessWidget {
 
   ArticleItem({
     @required this.article,
-    @required this.deleteItem,      
-    @required this.fromScreen,      
+    @required this.deleteItem,
+    @required this.fromScreen,
 });
 
   void selectArticle(BuildContext context) {
@@ -30,6 +30,7 @@ class ArticleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        // Fixme change to EdgeInsets.symmetric()
         margin: EdgeInsets.only(
           left: 0,
           top: 5,
@@ -67,7 +68,7 @@ class ArticleItem extends StatelessWidget {
                             Container(
                               padding: const EdgeInsets.all(10),
                               width: MediaQuery.of(context).size.width - 80.0,
-                              child: 
+                              child:
                                 Text(
                                   article.username + ' - ' + article.elapsedTime.toString() + ' hrs ago',
                                   style: GoogleFonts.notoSans(fontStyle: FontStyle.normal, fontSize: 15, color: Colors.black),
@@ -78,13 +79,47 @@ class ArticleItem extends StatelessWidget {
                                 left: 10,
                               ),
                               width: MediaQuery.of(context).size.width - 80.0,
-                              child: 
+                              child:
                                 Text(
                                   article.title,
                                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
         //                          style: GoogleFonts.notoSans(fontStyle: FontStyle.normal, fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black),
                                 ),
-                            ), 
+                            ),
+                            // FixMe better to have expanded widget
+                            // Expanded(
+                            //   child: Column(
+                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       Padding(
+                            //         padding: EdgeInsets.all(8.0).copyWith(bottom: 0),
+                            //         child: Text(
+                            //           article.username +
+                            //               ' - ' +
+                            //               article.elapsedTime.toString() +
+                            //               ' hrs ago',
+                            //           style: GoogleFonts.notoSans(
+                            //               fontStyle: FontStyle.normal,
+                            //               fontSize: 15,
+                            //               color: Colors.black),
+                            //         ),
+                            //       ),
+                            //       Padding(
+                            //         padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
+                            //         child: Text(
+                            //           article.title,
+                            //           maxLines: 1,
+                            //           overflow: TextOverflow.ellipsis,
+                            //           style: TextStyle(
+                            //               fontSize: 17,
+                            //               fontWeight: FontWeight.w700),
+                            //           //                          style: GoogleFonts.notoSans(fontStyle: FontStyle.normal, fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(

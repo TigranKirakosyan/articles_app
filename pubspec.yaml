@@ -50,6 +50,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Fixme only directory could be imported - assets/images/
   assets:
     - Articles.json
     - assets/images/avatar.png

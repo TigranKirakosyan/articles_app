@@ -57,6 +57,8 @@ class StateContainerState extends State<StateContainer> {
   }
 }
 
+// Fixme it is possible to store data inside the InheritedWidget, why to use additional
+// wrapper widget
 class _InheritedStateContainer extends InheritedWidget {
   final StateContainerState data;
 

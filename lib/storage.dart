@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+//Good
 class Storage {
   Future<String> get localPath async {
     final dir = await getApplicationDocumentsDirectory();

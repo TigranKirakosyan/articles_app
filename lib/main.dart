@@ -126,6 +126,7 @@ Future<String> getArticlesFromFile() async {
 
   @override
   Widget build(BuildContext context) {
+    // Fixme Will be better to use single FutureBuilder on top of the tree
       var futureBuilder =  FutureBuilder<List<Article>>(
                         future: futureArticle,
 //                        future: DefaultAssetBundle.of(context).loadString('assets/Articles.json'),
@@ -164,7 +165,7 @@ Future<String> getArticlesFromFile() async {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
               String result = snapshot.data;
-
+              // Fixme parse the json inside getArticlesFromFile() method
               final data = json.decode(result);
               articles = data.map<Article>( (entry) { 
                   print(entry);

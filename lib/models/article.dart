@@ -1,4 +1,3 @@
-
 class Article {
   final int id;
   final String title;
